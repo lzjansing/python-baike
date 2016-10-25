@@ -1,4 +1,6 @@
 # coding:utf8
+from bs4 import BeautifulSoup
+
 import url_manager
 import html_parser
 import html_downloader
@@ -9,9 +11,10 @@ class SpiderMain(object):
     self.urls=url_manager.UrlManager()
     self.downloader=html_downloader.HtmlDownloader()
     self.outputer=html_outputer.HtmlOutputer()
-    self.parser=html_parser.HtmlParser()
+    self.parser=html_parser.HtmlParser(config)
 
   def craw(self,root_url):
+    death_count=int(config.find('count').text)
     count=1
     self.urls.add_new_url(root_url)
     while self.urls.has_new_url():
@@ -22,7 +25,7 @@ class SpiderMain(object):
         new_urls,new_data=self.parser.parse(new_url,html_cont)
         self.urls.add_new_urls(new_urls)
         self.outputer.collect_data(new_data)
-        if count==1000:
+        if count>=death_count:
           break
         count=count+1
       except Exception,e:
@@ -31,9 +34,15 @@ class SpiderMain(object):
 
 
 if __name__=='__main__':
+  try:
+    config_file=open('config.xml','r')
+    config=config_file.read()
+  finally:
+    config_file.close()
+    config_file=None
+  config=BeautifulSoup(config, 'lxml',from_encoding='utf-8')
   print 'begin'
-  root_url='http://baike.baidu.com/view/21087.htm'
+  root_url=config.find('root-url').text
   obj_spider=SpiderMain()
   obj_spider.craw(root_url)
-
 

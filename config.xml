@@ -1,0 +1,29 @@
+<root>
+    <root-url>http://baike.baidu.com/view/21087.htm</root-url>
+    <death>
+        <count>3</count>
+    </death>
+
+    <url-patterns>
+        <url-pattern>/view/\d+.htm</url-pattern>
+    </url-patterns>
+    <data-patterns>
+        <data-pattern>
+            <title>title</title>
+            <find>
+                <tag>dd</tag>
+                <class>lemmaWgt-lemmaTitle-title</class>
+                <find>
+                    <tag>h1</tag>
+                </find>
+            </find>
+        </data-pattern>
+        <data-pattern>
+            <title>summary</title>
+            <find>
+                <tag>div</tag>
+                <class>lemma-summary</class>
+            </find>
+        </data-pattern>
+    </data-patterns>
+</root>
